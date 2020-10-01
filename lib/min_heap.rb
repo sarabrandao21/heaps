@@ -14,8 +14,8 @@ class MinHeap
   end
 
   # This method adds a HeapNode instance to the heap
-  # Time Complexity: ?
-  # Space Complexity: ?
+  # Time Complexity: O(log n)
+  # Space Complexity: O(1)
   def add(key, value = key)
     # if odd is being added to the right
     # if even is being added to the left 
@@ -26,8 +26,8 @@ class MinHeap
 
   # This method removes and returns an element from the heap
   #   maintaining the heap structure
-  # Time Complexity: ?
-  # Space Complexity: ?
+  # Time Complexity: O(log n)
+  # Space Complexity: O(1)
   def remove()
     if @store.empty? 
       return nil 
@@ -58,8 +58,8 @@ class MinHeap
   end
 
   # This method returns true if the heap is empty
-  # Time complexity: ?
-  # Space complexity: ?
+  # Time complexity: O(1)
+  # Space complexity: O(1)
   def empty?
     return @store.empty?
   end
@@ -69,8 +69,8 @@ class MinHeap
   # This helper method takes an index and
   #  moves it up the heap, if it is less than it's parent node.
   #  It could be **very** helpful for the add method.
-  # Time complexity: ?
-  # Space complexity: ?
+  # Time complexity: O(log n)
+  # Space complexity: O(log n)
   def heap_up(index) # last index first time 
     parent = (index - 1) / 2
     bottom = @store[index]
@@ -85,22 +85,24 @@ class MinHeap
   #  moves it up the heap if it's smaller
   #  than it's parent node.
   def heap_down(index)
-    
-    max_length = @store.length - 1 
-    child_left = index * 2 + 1
-    child_right = index * 2 + 2
-    top = @store[index]
-    
-    if index <= max_length 
-      if !@store[child_left].nil? && top.key > @store[child_left].key
-        heap_down(child_left)
-        swap(index, child_left)
-        
-      elsif !@store[child_right].nil? && top.key > @store[child_right].key 
-        swap(index, child_right)
-        heap_down(child_left)
-      end 
+    right_child = 2 * index + 2
+    left_child = 2 * index + 1
+    max_length = @store.length 
+    smallest = left_child # default for when right_child is nil   
+    if left_child >= max_length #only check the left child 
+      return 
     end 
+
+    if @store[right_child] 
+      smallest = @store[left_child].key > @store[right_child].key ? right_child : left_child
+    end 
+
+    if @store[smallest].key < @store[index].key
+      swap(smallest, index)
+      heap_down(smallest)
+    else
+      return 
+    end
   end
 
   # If you want a swap method... you're welcome
